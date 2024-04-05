@@ -166,7 +166,7 @@ router.post(
     if (!friend) {
       console.log("friend  not found");
       // return res.status(404).json({ error: "User not found" });
-      return res.status(404).sned({ error: "User not found" });
+      return res.status(404).send({ error: "User not found" });
     }
 
     // Check if user exists
