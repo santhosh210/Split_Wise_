@@ -1,7 +1,4 @@
 const mongoose = require("mongoose");
-const Joi = require("joi");
-const { User } = require("./User");
-const { Group } = require("./Group");
 
 const expenseSchema = new mongoose.Schema({
   expenseId: {
@@ -15,81 +12,87 @@ const expenseSchema = new mongoose.Schema({
   amount: {
     type: Number,
     required: true,
+    min: 0,
   },
   date: {
     type: Date,
     default: Date.now,
   },
   payer: {
-    type: String,
-    ref: "User",
-    required: true,
+    payerId: {
+      type: String,
+    },
+    payerAmount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    payerPercentage: {
+      type: Number,
+      default: 0,
+      min: 0,
+      max: 100,
+    },
+    payerShare: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    paid: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    owes: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
   },
   participants: [
     {
-      user: {
+      participantId: {
         type: String,
-        ref: "User",
         required: true,
       },
-      contribution: {
+      participantAmount: {
         type: Number,
-        required: true,
+        min: 0,
+      },
+      participantPercentage: {
+        type: Number,
+        default: 0,
+        min: 0,
+        max: 100,
+      },
+      participantShare: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      paid: {
+        type: Number,
+        default: 0,
+        min: 0,
+      },
+      owes: {
+        type: Number,
+        default: 0,
+        min: 0,
       },
     },
   ],
-
   splitType: {
     type: String,
-    required: true,
-  },
-  splitDetails: {
-    type: Object,
-    required: true,
+    enum: ["equally", "percentages", "shares", "unequally"],
+    default: "equally",
   },
   settled: {
     type: Boolean,
     default: false,
   },
-  settledBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-  },
-  settlementAmount: {
-    type: Number,
-  },
-  settlementDate: {
-    type: Date,
-  },
-  // Additional metadata can be added here
 });
 
 const Expense = mongoose.model("Expense", expenseSchema);
 
-const validateExpense = (expense) => {
-  const schema = Joi.object({
-    description: Joi.string().required(),
-    // amount: Joi.number().min(0).required(),
-    // date: Joi.date().iso(),
-    // payer: Joi.string().required(),
-    // participants: Joi.array().items(
-    //   Joi.object({
-    //     user: Joi.string().required(),
-    //     contribution: Joi.number().min(0).required(),
-    //   })
-    // ),
-    // splitType: Joi.string().required(),
-    // splitDetails: Joi.object().required(),
-    // settled: Joi.boolean(),
-    // settledBy: Joi.string(),
-    // settlementAmount: Joi.number().min(0),
-    // settlementDate: Joi.date().iso(),
-    // Additional metadata validation can be added here
-  });
-  return schema.validate(expense);
-};
-
-module.exports = {
-  Expense,
-  validateExpense,
-};
+module.exports = Expense;

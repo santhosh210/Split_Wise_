@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-const Joi = require("joi");
 
 const userSchema = new mongoose.Schema({
   userId: {
@@ -59,15 +58,15 @@ const userSchema = new mongoose.Schema({
       },
     },
   ],
+  expenses: [
+    {
+      type: String,
+    },
+  ],
 });
 
 const User = mongoose.model("User", userSchema);
 
-const userValidationSchema = Joi.object({
-  phone: Joi.string(),
-});
-
 module.exports = {
   User,
-  validateUser: (user) => userValidationSchema.validate(user),
 };
