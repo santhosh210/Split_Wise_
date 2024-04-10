@@ -14,7 +14,7 @@ router.post(
   auth,
   asyncHandler(async (req, res) => {
     const users = await mongoFunctions.find("User");
-    res.status(200).json(users);
+    res.status(200).send(crypto.encryptobj(users));
     // res.status(200).send(crypto.encryptobj(users));
   })
 );
