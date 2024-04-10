@@ -10,7 +10,7 @@ const sendAlerts = require("./helpers/telegramBot");
 require("dotenv").config();
 
 const app = express();
-const port = process.env.port;
+const port = process.env.port || 4000;
 
 app.use(express.json());
 app.use(cors());
